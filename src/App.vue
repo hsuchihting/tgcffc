@@ -1,30 +1,149 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="bg-gray-100 h-screen">
+    <h1
+      class="p-4 text-2xl text-yellow-200 bg-red-900 font-bold tracking-wider text-center"
+    >
+      {{ title }}
+      <p>{{ subTitle }}</p>
+    </h1>
+
+    <div class="container mx-auto border-t-4 border-white">
+      <div class="text-center mt-20 mb-40 space-y-3">
+        <h2
+          class="font-bold text-6xl text-gray-700"
+          :class="{ 'text-red-600': isHoliday }"
+        >
+          {{ thisDay }}
+        </h2>
+        <h2 class="mt-4">{{ today }}</h2>
+      </div>
+    </div>
+
+    <div class="mt-4 mx-4">
+      <select class="w-full">
+        <option
+          :value="member.login.uuid"
+          v-for="member in members"
+          :key="member.login.uuid"
+        >
+          {{ member.name.first }}
+        </option>
+      </select>
+      <p class="text-center mt-4 text-xl">這是您第 0 次晨禱</p>
+    </div>
+
+    <!-- flex two buttons -->
+    <div class="flex justify-center mt-36">
+      <div class="w-1/2">
+        <button
+          class="w-full px-4 py-4 text-2xl text-yellow-300 ont-bold bg-red-900 f hover:bg-red-800"
+        >
+          晨禱簽到
+        </button>
+      </div>
+      <div class="w-1/2">
+        <button
+          class="w-full px-4 py-4 text-2xl text-red-900 font-bold bg-yellow-300 hover:bg-yellow-500"
+        >
+          平安到家
+        </button>
+      </div>
+    </div>
+    <!-- copyright -->
+    <div class="flex justify-around">
+      <!-- create four buttons -->
+      <div class="grid grid-cols-3 gap-4 mt-4">
+        <div class="w-full">
+          <button
+            class="text-2xl text-gray-600 border border-gray-600 rounded-md p-4"
+          >
+            開發中
+          </button>
+        </div>
+
+        <div class="w-full">
+          <button
+            class="text-2xl text-gray-600 border border-gray-600 rounded-md p-4"
+          >
+            開發中
+          </button>
+        </div>
+
+        <div class="w-full">
+          <button
+            class="text-2xl text-gray-600 border border-gray-600 rounded-md p-4"
+          >
+            開發中
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-10">
+      <p class="my-4 text-red-900">
+        Taipei Glory Church Fire Female Club &copy; 2023
+      </p>
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<script>
+const randomApi = "https://randomuser.me/api/?results=6";
+
+import Dayjs from "dayjs";
+export default {
+  name: "App",
+  data() {
+    return {
+      title: "台北榮耀堂烈火弟兄",
+      subTitle: "禱告會簽到表",
+      members: [],
+    };
+  },
+  computed: {
+    thisDay() {
+      // using Dayjs get day
+      const day = Dayjs().day();
+      switch (day) {
+        case 0:
+          return "星期日";
+        case 1:
+          return "星期一";
+        case 2:
+          return "星期二";
+        case 3:
+          return "星期三";
+        case 4:
+          return "星期四";
+        case 5:
+          return "星期五";
+        case 6:
+          return "星期六";
+      }
+    },
+    today() {
+      // using Dayjs format today
+      return Dayjs().format("YYYY/MM/DD");
+    },
+    isHoliday(){
+      // using Dayjs get day
+      const day = Dayjs().day();
+      switch (day) {
+        case 0:
+          return "星期日";
+        case 6:
+          return "星期六";
+      }
+    }
+  },
+  mounted() {
+    this.getApi();
+  },
+  methods: {
+    getApi() {
+      this.$http.get(randomApi).then((res) => {
+        this.members = res.data.results;
+      });
+    },
+  },
+};
+</script>

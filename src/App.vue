@@ -91,7 +91,7 @@
 <script>
 // const randomApi = "https://randomuser.me/api/?results=6";
 const apiUrl =
-  "https://script.google.com/macros/s/AKfycbxbyOlW4hj6s865GeWthe03j4KHgjK3zOjIZ30EDdjxQJhYLUrpfeDTioluWDkkptMs/exec";
+  "https://script.google.com/macros/s/AKfycbyncZFmWOnzyFT2RBX3TOPPR7SAC4whUAmxUDl9eS4jz8EmtKyWhhY0P1lEXl61FrJU/exec";
 
 import Dayjs from "dayjs";
 export default {

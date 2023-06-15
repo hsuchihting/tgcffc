@@ -20,15 +20,16 @@
     </div>
 
     <div class="mt-4 mx-4">
-      <select class="w-full">
-        <option
-          :value="member.login.uuid"
-          v-for="member in members"
-          :key="member.login.uuid"
+      <form>
+        <select
+          v-model="memberName"
+          class="w-full rounded-md p-4 border border-gray-300 outline-none"
         >
-          {{ member.name.first }}
-        </option>
-      </select>
+          <option :value="item.name" v-for="item in members" :key="item.name">
+            {{ item.name }}
+          </option>
+        </select>
+      </form>
       <p class="text-center mt-4 text-xl">這是您第 0 次晨禱</p>
     </div>
 
@@ -37,6 +38,7 @@
       <div class="w-1/2">
         <button
           class="w-full px-4 py-4 text-2xl text-yellow-300 ont-bold bg-red-900 f hover:bg-red-800"
+          @click="submitHandler()"
         >
           晨禱簽到
         </button>
@@ -87,7 +89,9 @@
 </template>
 
 <script>
-const randomApi = "https://randomuser.me/api/?results=6";
+// const randomApi = "https://randomuser.me/api/?results=6";
+const apiUrl =
+  "https://script.google.com/macros/s/AKfycbxbyOlW4hj6s865GeWthe03j4KHgjK3zOjIZ30EDdjxQJhYLUrpfeDTioluWDkkptMs/exec";
 
 import Dayjs from "dayjs";
 export default {
@@ -97,6 +101,7 @@ export default {
       title: "台北榮耀堂烈火弟兄",
       subTitle: "禱告會簽到表",
       members: [],
+      memberName: "",
     };
   },
   computed: {
@@ -124,7 +129,7 @@ export default {
       // using Dayjs format today
       return Dayjs().format("YYYY/MM/DD");
     },
-    isHoliday(){
+    isHoliday() {
       // using Dayjs get day
       const day = Dayjs().day();
       switch (day) {
@@ -133,15 +138,27 @@ export default {
         case 6:
           return "星期六";
       }
-    }
+    },
   },
   mounted() {
     this.getApi();
   },
   methods: {
     getApi() {
-      this.$http.get(randomApi).then((res) => {
-        this.members = res.data.results;
+      this.$http.get(apiUrl).then((res) => {
+        const newData = res.data;
+        console.log(newData);
+        this.members = newData;
+      });
+    },
+    submitHandler() {
+      let options = {
+        name: this.memberName,
+        date: this.today,
+      };
+
+      this.$http.post(apiUrl, options).then((res) => {
+        console.log(res);
       });
     },
   },

@@ -90,9 +90,10 @@
 
 <script>
 // const randomApi = "https://randomuser.me/api/?results=6";
-const apiUrl =
-  "https://script.google.com/macros/s/AKfycbyncZFmWOnzyFT2RBX3TOPPR7SAC4whUAmxUDl9eS4jz8EmtKyWhhY0P1lEXl61FrJU/exec";
 
+import firebase from "firebase/app";
+import "firebase/database";
+import Swal from "sweetalert2";
 import Dayjs from "dayjs";
 export default {
   name: "App",
@@ -103,6 +104,22 @@ export default {
       members: [],
       memberName: "",
     };
+  },
+  created() {
+    // Initialize Firebase
+    const firebaseConfig = {
+      // Your Firebase configuration
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    // Get data from Firebase
+    const database = firebase.database();
+    const membersRef = database.ref("members");
+
+    membersRef.on("value", (snapshot) => {
+      const members = snapshot.val();
+      this.members = Object.values(members);
+    });
   },
   computed: {
     thisDay() {
@@ -156,9 +173,16 @@ export default {
         name: this.memberName,
         date: this.today,
       };
-
+      console.log(options);
       this.$http.post(apiUrl, options).then((res) => {
-        console.log(res);
+        if (res.data.success) {
+          Swal.fire({
+            title: "簽到成功",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
       });
     },
   },

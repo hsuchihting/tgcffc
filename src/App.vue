@@ -15,7 +15,7 @@
         >
           {{ thisDay }}
         </h2>
-        <h2 class="mt-4">{{ today }}</h2>
+        <h2 class="mt-4 text-2xl">－{{ today }}－</h2>
       </div>
     </div>
 
@@ -62,37 +62,37 @@
     </div>
 
     <!-- copyright -->
-    <div class="flex justify-around">
+    <div class="flex justify-around px-2 mt-4">
       <!-- create four buttons -->
-      <div class="grid grid-cols-3 gap-4 mt-4">
-        <div class="w-full">
-          <button
-            class="text-2xl text-gray-600 border border-gray-600 rounded-md p-4"
-          >
-            開發中
-          </button>
-        </div>
 
-        <div class="w-full">
-          <button
-            class="text-2xl text-gray-600 border border-gray-600 rounded-md p-4"
-          >
-            開發中
-          </button>
-        </div>
+      <div>
+        <button
+          @click="toQTweb()"
+          class="text-2xl text-gray-600 border border-gray-600 rounded-md p-4"
+        >
+          活潑的生命
+        </button>
+      </div>
 
-        <div class="w-full">
-          <button
-            class="text-2xl text-gray-600 border border-gray-600 rounded-md p-4"
-          >
-            開發中
-          </button>
-        </div>
+      <div class="px-4">
+        <button
+          class="text-2xl text-gray-600 border border-gray-600 rounded-md p-4"
+        >
+          開發中
+        </button>
+      </div>
+
+      <div>
+        <button
+          class="text-2xl text-gray-600 border border-gray-600 rounded-md p-4"
+        >
+          開發中
+        </button>
       </div>
     </div>
     <div class="text-center mt-10">
-      <p class="my-4 text-red-900">
-        Taipei Glory Church Fire Female Club &copy; 2023
+      <p class="my-4 text-red-900 font-medium">
+        Taipei Glory Church Fire Female Club &copy; {{ year }}
       </p>
     </div>
 
@@ -224,14 +224,13 @@ export default {
           return false;
       }
     },
+    year() {
+      return Dayjs().format("YYYY");
+    },
     //打卡時間只能在早上七點到八點之間
     isCheckInTime() {
       const time = Dayjs().format("HH:mm:ss");
-      if (time >= "07:00:00" && time <= "08:00:00") {
-        return true;
-      } else {
-        return false;
-      }
+      return time >= "07:00:00" && time <= "08:00:00";
     },
   },
   mounted() {
@@ -312,6 +311,9 @@ export default {
       if (memberName === this.memberName) {
         this.showRecordModal = true;
       }
+    },
+    toQTweb() {
+      window.location.href = "http://www.duranno.tw/livinglife/index.php/daily";
     },
   },
 };

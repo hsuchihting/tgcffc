@@ -224,6 +224,15 @@ export default {
           return false;
       }
     },
+    //打卡時間只能在早上七點到八點之間
+    isCheckInTime() {
+      const time = Dayjs().format("HH:mm:ss");
+      if (time >= "07:00:00" && time <= "08:00:00") {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   mounted() {
     this.getMemberCheckInData();
@@ -254,6 +263,16 @@ export default {
         Swal.fire({
           title: "簽到失敗",
           text: "請選擇姓名",
+          icon: "error",
+          confirmButtonText: "確定",
+        });
+        return;
+      }
+
+      if (!this.isCheckInTime) {
+        Swal.fire({
+          title: "簽到失敗",
+          text: "請在早上七點到八點之間簽到",
           icon: "error",
           confirmButtonText: "確定",
         });

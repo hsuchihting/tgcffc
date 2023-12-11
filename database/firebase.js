@@ -10,12 +10,7 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-app.post('/api/post', (req, res) => {
-  const { name, time } = req.body;
+const database = firebase.database();
 
-  // 在這裡處理你的邏輯，例如將資料存入資料庫或進行其他操作
+export default database;
 
-  res.status(200).json({ message: '成功傳送資料' });
-});
-
-export default firebase;

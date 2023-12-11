@@ -90,11 +90,13 @@
 
 <script>
 // const randomApi = "https://randomuser.me/api/?results=6";
-
-import firebase from "firebase/app";
-import "firebase/database";
 import Swal from "sweetalert2";
 import Dayjs from "dayjs";
+import database from "../database/firebase";
+
+/** 
+ * 
+*/
 export default {
   name: "App",
   data() {
@@ -106,20 +108,7 @@ export default {
     };
   },
   created() {
-    // Initialize Firebase
-    const firebaseConfig = {
-      // Your Firebase configuration
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    // Get data from Firebase
-    const database = firebase.database();
-    const membersRef = database.ref("members");
-
-    membersRef.on("value", (snapshot) => {
-      const members = snapshot.val();
-      this.members = Object.values(members);
-    });
+     
   },
   computed: {
     thisDay() {
@@ -158,15 +147,14 @@ export default {
     },
   },
   mounted() {
-    this.getApi();
+    this.getDatabase();
+   
   },
-  methods: {
-    getApi() {
-      this.$http.get(apiUrl).then((res) => {
-        const newData = res.data;
-        console.log(newData);
-        this.members = newData;
-      });
+  methods: {   
+    getDatabase(){
+     const db = database.ref("members");
+     console.log(db);
+
     },
     submitHandler() {
       let options = {

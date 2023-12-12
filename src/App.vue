@@ -8,7 +8,7 @@
     </h1>
 
     <div class="container mx-auto border-t-4 border-white">
-      <div class="text-center mt-20 mb-40 space-y-3">
+      <div class="text-center mt-40 mb-20 space-y-3">
         <h2
           class="font-bold text-6xl text-gray-700"
           :class="{ 'text-red-600': isHoliday }"
@@ -42,7 +42,7 @@
     </div>
 
     <!-- flex two buttons -->
-    <div class="flex justify-center mt-36">
+    <div class="flex justify-center mt-20">
       <div class="w-1/2">
         <button
           class="w-full px-4 py-4 text-2xl text-yellow-300 ont-bold bg-red-900 f hover:bg-red-800"
@@ -67,10 +67,10 @@
 
       <div>
         <button
-          @click="toQTweb()"
+          @click="toLivePrayWebsite()"
           class="text-2xl text-gray-600 border border-gray-600 rounded-md p-4"
         >
-          活潑的生命
+          今日經文
         </button>
       </div>
 
@@ -90,7 +90,7 @@
         </button>
       </div>
     </div>
-    <div class="text-center mt-10">
+    <div class="text-center mt-10 mb-4">
       <p class="my-4 text-red-900 font-medium">
         Taipei Glory Church Fire Female Club &copy; {{ year }}
       </p>
@@ -100,18 +100,15 @@
 
     <div
       v-if="showRecordModal"
-      class="absolute top-0 left-0 right-0 bottom-0 bg-black"
+      class="absolute top-0 left-0 right-0 bottom-0 bg-gray-900 bg-opacity-90 h-screen"
     >
-      <div
-        class="w-full my-auto mx-auto rounded-lg bg-white shadow-md overflow-hidden"
-      >
-        <div class="pb-4">
-          <h3
-            class="bg-red-900 text-2xl text-yellow-300 p-4 text-center overflow-hidden"
-          >
-            烈火弟兄 {{ memberName }} 晨禱紀錄
-          </h3>
-
+      <div class=" w-11/12 mt-20 mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+        <h3
+          class="bg-red-900 text-2xl text-yellow-300 p-4 text-center overflow-hidden"
+        >
+          烈火弟兄 {{ memberName }} 晨禱紀錄
+        </h3>
+        <div class="p-4">
           <div v-if="checkInTimes.length">
             <ol class="p-4 text-xl">
               <li
@@ -124,14 +121,19 @@
             </ol>
           </div>
           <div v-else>
+            <div class="py-10 flex justify-center items-center">
+              <i
+                class="fa-solid fa-triangle-exclamation fa-5x text-red-900"
+              ></i>
+            </div>
             <p class="text-center text-2xl p-4">您尚未參加過晨禱喔！</p>
           </div>
 
           <button
             @click="showRecordModal = false"
-            class="px-5 py-2 bg-red-900 text-yellow-300 text-2xl font-bold rounded-md block mx-auto"
+            class="mt-5 w-full px-4 py-4 bg-red-900 text-yellow-300 text-2xl font-bold rounded-md block mx-auto"
           >
-            確定
+            關閉
           </button>
         </div>
       </div>
@@ -140,14 +142,27 @@
 </template>
 
 <script>
-// const randomApi = "https://randomuser.me/api/?results=6";
 import Swal from "sweetalert2";
 import Dayjs from "dayjs";
 import database from "../database/firebase";
 
 /**
- *
+ * @page App
+ * @description 榮耀堂烈火弟兄禱告會簽到表
+ * @data title: 標題
+ * @data subTitle: 副標題
+ * @data members: 烈火弟兄名單
+ * @data memberName: 選擇的烈火弟兄名字
+ * @data checkInTimes: 烈火弟兄簽到紀錄
+ * @data showRecordModal: 是否顯示簽到紀錄
+ * @computed thisDay: 今天是星期幾
+ * @computed today: 今天日期
+ * @computed time: 今天時間
+ * @computed isHoliday: 今天是否為假日
+ * @computed year: 今年
+ * @computed isCheckInTimeOnSaturdayAtSevenToEight: 是否在簽到時間內
  */
+
 export default {
   name: "App",
   data() {
@@ -213,7 +228,6 @@ export default {
       return Dayjs().format("HH:mm:ss");
     },
     isHoliday() {
-      // using Dayjs get day
       const day = Dayjs().day();
       switch (day) {
         case 0:
@@ -228,9 +242,10 @@ export default {
       return Dayjs().format("YYYY");
     },
     //打卡時間只能在早上七點到八點之間
-    isCheckInTime() {
-      const time = Dayjs().format("HH:mm:ss");
-      return time >= "07:00:00" && time <= "08:00:00";
+    isCheckInTimeOnSaturdayAtSevenToEight() {
+      const day = Dayjs().day();
+      const hour = Dayjs().hour();
+      return day === 6 && hour >= 7 && hour <= 8;
     },
   },
   mounted() {
@@ -259,61 +274,51 @@ export default {
       };
 
       if (!this.memberName) {
-        Swal.fire({
-          title: "簽到失敗",
-          text: "請選擇姓名",
-          icon: "error",
-          confirmButtonText: "確定",
-        });
+        this.sweetAlert("簽到失敗", "請選擇姓名", "warning");
         return;
       }
 
-      if (!this.isCheckInTime) {
-        Swal.fire({
-          title: "簽到失敗",
-          text: "請在早上七點到八點之間簽到",
-          icon: "error",
-          confirmButtonText: "確定",
-        });
-        return;
-      }
-      // post to firebase
-      database
-        .ref("checkIn")
-        .push(options)
-        .then(() => {
-          Swal.fire({
-            title: "簽到成功",
-            text: "歡迎參加晨禱",
-            icon: "success",
-            confirmButtonText: "確定",
-          });
-        })
-        .catch((err) => {
-          Swal.fire({
-            title: "簽到失敗",
-            text: "請重新簽到",
-            icon: "error",
-            confirmButtonText: "確定",
-          });
-        });
+      /**
+       * @description 簽到時間只能在早上七點到八點之間
+       * *todo: 暫時註解
+       */
+      // if (!this.isCheckInTimeOnSaturdayAtSevenToEight) {
+      //   this.sweetAlert("簽到失敗", "請在週六早上七點到八點之間簽到", "error");
+      //   return;
+      // }
+
+     this.postOptionToFireBase(options);
     },
     prayRecordList(memberName) {
       if (!this.memberName) {
-        Swal.fire({
-          title: "查詢失敗",
-          text: "請選擇姓名",
-          icon: "error",
-          confirmButtonText: "確定",
-        });
+        this.sweetAlert("查詢失敗", "請選擇姓名", "warning");
         return;
       }
       if (memberName === this.memberName) {
         this.showRecordModal = true;
       }
     },
-    toQTweb() {
+    toLivePrayWebsite() {
       window.location.href = "http://www.duranno.tw/livinglife/index.php/daily";
+    },
+    sweetAlert(title, text, icon) {
+      Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        confirmButtonText: "確定",
+      });
+    },
+    postOptionToFireBase(options) {
+      database
+        .ref("checkIn")
+        .push(options)
+        .then(() => {
+          this.sweetAlert("簽到成功", "歡迎參加晨禱", "success");
+        })
+        .catch((err) => {
+          this.sweetAlert("簽到失敗", "請重新簽到", "error");
+        });
     },
   },
 };

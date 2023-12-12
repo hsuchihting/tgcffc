@@ -3,4 +3,4 @@
 ## 烈火弟兄會晨禱報到
 * Vue.js 3
 * Tailwind CSS 3.3
-* Google Sheet API
+* firebase

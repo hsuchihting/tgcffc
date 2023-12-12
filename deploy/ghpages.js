@@ -1,7 +1,7 @@
 // place at : deploy/ghpages.js
 // you can see more info at https://github.com/tschaub/gh-pages
-const path = require('path');
-const ghpages = require('gh-pages');
+import path from 'path';
+import ghpages from 'gh-pages';
 
 const options = {
     branch: 'gh-pages',
@@ -17,4 +17,4 @@ const callback = err => {
 /**
  * This task pushes to the `master` branch of the configured `repo`.
  */
-ghpages.publish(path.resolve(__dirname, '../dist'), options, callback);
+ghpages.publish(path.resolve(process.cwd(), './dist'), options, callback);

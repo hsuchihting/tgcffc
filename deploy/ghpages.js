@@ -1,5 +1,5 @@
 // place at : deploy/ghpages.js
-// you can see more info at https://github.com/tschaub/gh-pages
+// you can see more info at https://israynotarray.com/git/20230530/3386912069/
 import path from 'path';
 import ghpages from 'gh-pages';
 

@@ -1,6 +1,6 @@
 # TAIPEI GLORY CHURCH FIRE FEMALE CLUB
 
-- Demo 網址：
+- Demo 網址：https://hsuchihting.github.io/tgcffc/
 
 ## 烈火弟兄會晨禱報到
 

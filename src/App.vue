@@ -102,7 +102,9 @@
       v-if="showRecordModal"
       class="absolute top-0 left-0 right-0 bottom-0 bg-gray-900 bg-opacity-90 h-screen"
     >
-      <div class=" w-11/12 mt-20 mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+      <div
+        class="w-11/12 mt-20 mx-auto bg-white rounded-lg shadow-md overflow-hidden"
+      >
         <h3
           class="bg-red-900 text-2xl text-yellow-300 p-4 text-center overflow-hidden"
         >
@@ -110,15 +112,28 @@
         </h3>
         <div class="p-4">
           <div v-if="checkInTimes.length">
-            <ol class="p-4 text-xl">
-              <li
-                class="py-4"
-                v-for="(item, index) in checkInTimes"
-                :key="index"
-              >
-                {{ index + 1 }} {{ item.name }} {{ item.date }}
-              </li>
-            </ol>
+            <table class="w-full">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="border border-gray-300 p-2">次數</th>
+                  <th class="border border-gray-300 p-2">姓名</th>
+                  <th class="border border-gray-300 p-2">簽到日期</th>
+                  <th class="border border-gray-300 p-2">簽到時間</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in checkInTimes" :key="index">
+                  <td class="border border-gray-300 p-2">{{ index + 1 }}</td>
+                  <td class="border border-gray-300 p-2">{{ item.name }}</td>
+                  <td class="border border-gray-300 p-2">
+                    {{ item.date.split(" ")[0] }}
+                  </td>
+                  <td class="border border-gray-300 p-2">
+                    {{ item.date.split(" ")[2] }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <div v-else>
             <div class="py-10 flex justify-center items-center">
@@ -287,7 +302,7 @@ export default {
       //   return;
       // }
 
-     this.postOptionToFireBase(options);
+      this.postOptionToFireBase(options);
     },
     prayRecordList(memberName) {
       if (!this.memberName) {

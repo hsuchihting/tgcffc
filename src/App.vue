@@ -36,8 +36,19 @@
           </option>
         </select>
       </form>
-      <p class="text-center mt-4 text-xl">
-        這是您第 {{ checkInTimes.length }} 次晨禱
+      <p
+        class="text-center mt-4 text-xl"
+        :class="{ 'text-red-900': checkInTimesOverSeven }"
+      >
+        <span v-if="checkInTimesOverSeven"
+          ><i class="fa-solid fa-award"></i
+        ></span>
+        <span :class="{ ['text-red-900, mx-2']: checkInTimesOverSeven }">
+          這是您第 {{ checkInTimes.length }} 次晨禱
+        </span>
+        <span v-if="checkInTimesOverSeven"
+          ><i class="fa-solid fa-award"></i
+        ></span>
       </p>
     </div>
 
@@ -45,6 +56,8 @@
     <div class="flex justify-center mt-20">
       <div class="w-1/2">
         <button
+          :disabled="isCheckInToday"
+          :class="{ 'bg-gray-900': isCheckInToday }"
           class="w-full px-4 py-4 text-2xl text-yellow-300 ont-bold bg-red-900 f hover:bg-red-800"
           @click="submitHandler()"
         >
@@ -262,6 +275,10 @@ export default {
       const hour = Dayjs().hour();
       return day === 6 && hour >= 7 && hour <= 8;
     },
+    checkInTimesOverSeven() {
+      return this.checkInTimes.length >= 7;
+    },
+   
   },
   mounted() {
     this.getMemberCheckInData();
@@ -299,6 +316,23 @@ export default {
        */
       // if (!this.isCheckInTimeOnSaturdayAtSevenToEight) {
       //   this.sweetAlert("簽到失敗", "請在週六早上七點到八點之間簽到", "error");
+      //   return;
+      // }
+
+      /**
+       * @description 一天只能簽到一次
+       * * todo: 暫時註解
+       */
+
+      // const isCheckInName = this.checkInTimes.some(
+      //   (item) => item.name === this.memberName
+      // );
+      // const isCheckInToday = this.checkInTimes.some(
+      //   (item) => item.date.split(" ")[0] === this.today
+      // );
+
+      // if (isCheckInName && isCheckInToday && this.checkInTimes.length) {
+      //   this.sweetAlert("簽到失敗", "您今天已經簽到過了", "warning");
       //   return;
       // }
 

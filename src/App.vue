@@ -336,6 +336,19 @@ export default {
       //   return;
       // }
 
+      /**
+       * @description 簽到次數不能超過12次
+       */
+      const isCheckInNameHasCheckInOverTwelve = this.checkInTimes.some(
+        (item) =>
+          item.name === this.memberName && this.checkInTimes.length >= 12
+      );
+
+      // 從陣列中找出每一位成員，並且日期不能重複，且簽到次數不能超過12次
+      if (isCheckInNameHasCheckInOverTwelve) {
+        this.sweetAlert("你是大能的勇士", "恭喜已經完成 12 次成禱", "success");
+        return;
+      }
       this.postOptionToFireBase(options);
     },
     prayRecordList(memberName) {

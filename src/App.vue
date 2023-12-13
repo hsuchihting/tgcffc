@@ -124,7 +124,7 @@
           烈火弟兄 {{ memberName }} 晨禱紀錄
         </h3>
         <div class="p-4">
-          <div v-if="checkInTimes.length">
+          <div v-if="checkInTimes.length < 12">
             <table class="w-full">
               <thead class="bg-gray-100">
                 <tr>
@@ -224,6 +224,7 @@ export default {
       memberName: "",
       checkInTimes: [],
       showRecordModal: false,
+      isCheckInToday: false,
     };
   },
   created() {},
@@ -278,7 +279,6 @@ export default {
     checkInTimesOverSeven() {
       return this.checkInTimes.length >= 7;
     },
-   
   },
   mounted() {
     this.getMemberCheckInData();

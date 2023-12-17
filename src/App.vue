@@ -88,10 +88,10 @@
       </div>
 
       <div class="px-4">
-        <button
+        <button @click="clearFireBaseData()"
           class="text-2xl text-gray-600 border border-gray-600 rounded-md p-4"
         >
-          開發中
+          clear
         </button>
       </div>
 
@@ -226,8 +226,7 @@ export default {
       showRecordModal: false,
       isCheckInToday: false,
     };
-  },
-  created() {},
+  }, 
   computed: {
     thisDay() {
       // using Dayjs get day
@@ -380,6 +379,13 @@ export default {
         .catch((err) => {
           this.sweetAlert("簽到失敗", "請重新簽到", "error");
         });
+    },
+    clearFireBaseDataAtLastDayOnDecember() {     
+      const month = Dayjs().month();
+      const date = Dayjs().date();
+      if ( month === 12 && date === 31) {
+        database.ref("checkIn").remove();
+      }     
     },
   },
 };

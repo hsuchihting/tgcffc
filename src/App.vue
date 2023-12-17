@@ -124,7 +124,7 @@
           烈火弟兄 {{ memberName }} 晨禱紀錄
         </h3>
         <div class="p-4">
-          <div v-if="checkInTimes.length < 12">
+          <div v-if="checkInTimes.length && checkInTimes.length < 12">
             <table class="w-full">
               <thead class="bg-gray-100">
                 <tr>
@@ -281,15 +281,14 @@ export default {
     },
   },
   mounted() {
-    this.getMemberCheckInData();
+    // this.getMemberCheckInData();
   },
   methods: {
-    getMemberCheckInData() {
-      database.ref("checkIn").on("value", (snapshot) => {
-        const data = Object.values(snapshot.val());
-        console.log(data);
-      });
-    },
+    // getMemberCheckInData() {
+    //   database.ref("checkIn").on("value", (snapshot) => {
+    //     const data = Object.values(snapshot.val());      
+    //   });
+    // },
     selectNameHandler(e) {
       this.memberName = e.target.value;
       database.ref("checkIn").on("value", (snapshot) => {
@@ -346,7 +345,7 @@ export default {
 
       // 從陣列中找出每一位成員，並且日期不能重複，且簽到次數不能超過12次
       if (isCheckInNameHasCheckInOverTwelve) {
-        this.sweetAlert("你是大能的勇士", "恭喜已經完成 12 次成禱", "success");
+        this.sweetAlert("你是大能的勇士", "恭喜已經完成 12 次晨禱", "success");
         return;
       }
       this.postOptionToFireBase(options);

@@ -380,13 +380,13 @@ export default {
           this.sweetAlert("簽到失敗", "請重新簽到", "error");
         });
     },
-    clearFireBaseDataAtLastDayOnDecember() {     
-      const month = Dayjs().month();
-      const date = Dayjs().date();
-      if ( month === 12 && date === 31) {
-        database.ref("checkIn").remove();
-      }     
-    },
+    // clearFireBaseDataAtLastDayOnDecember() {     
+    //   const month = Dayjs().month();
+    //   const date = Dayjs().date();
+    //   if ( month === 12 && date === 31) {
+    //     database.ref("checkIn").remove();
+    //   }     
+    // },
   },
 };
 </script>

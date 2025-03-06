@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 h-screen relative">
+  <div class="bg-gray-100 h-screen relative w-full mx-auto md:max-w-[600px]">
     <h1
       class="p-4 text-2xl text-yellow-200 bg-red-900 font-bold tracking-wider text-center"
     >
@@ -24,6 +24,7 @@
         <select
           v-model="memberName"
           class="w-full rounded-md p-4 border border-gray-300 outline-none"
+          placeholder="請選擇姓名"
           @change="selectNameHandler($event)"
         >
           <option
@@ -32,7 +33,10 @@
             v-for="item in members"
             :key="item.name"
           >
+          <p class="py-2">
+
             {{ item.name }}
+          </p>
           </option>
         </select>
       </form>
@@ -88,7 +92,8 @@
       </div>
 
       <div class="px-4">
-        <button @click="clearFireBaseData()"
+        <button
+          @click="clearFireBaseData()"
           class="text-2xl text-gray-600 border border-gray-600 rounded-md p-4"
         >
           clear
@@ -103,7 +108,7 @@
         </button>
       </div>
     </div>
-    <div class="text-center mt-10 mb-4">
+    <div class="text-center mt-10 mb-6">
       <p class="my-4 text-red-900 font-medium">
         Taipei Glory Church Fire Female Club &copy; {{ year }}
       </p>
@@ -113,7 +118,7 @@
 
     <div
       v-if="showRecordModal"
-      class="absolute top-0 left-0 right-0 bottom-0 bg-gray-900 bg-opacity-90 h-screen"
+      class="absolute inset-0 bg-gray-900/50 "
     >
       <div
         class="w-11/12 mt-20 mx-auto bg-white rounded-lg shadow-md overflow-hidden"
@@ -173,7 +178,6 @@
 import Swal from "sweetalert2";
 import Dayjs from "dayjs";
 import database from "../database/firebase";
-
 /**
  * @page App
  * @description 榮耀堂烈火弟兄禱告會簽到表
@@ -226,7 +230,7 @@ export default {
       showRecordModal: false,
       isCheckInToday: false,
     };
-  }, 
+  },
   computed: {
     thisDay() {
       // using Dayjs get day
@@ -281,13 +285,30 @@ export default {
   },
   mounted() {
     // this.getMemberCheckInData();
+    this.getBibleVerse();
   },
   methods: {
     // getMemberCheckInData() {
     //   database.ref("checkIn").on("value", (snapshot) => {
-    //     const data = Object.values(snapshot.val());      
+    //     const data = Object.values(snapshot.val());
     //   });
     // },
+    getBibleVerse() {
+      const bibleApi ='https://scripture.api.bible/'
+      //use axios call api
+      axios
+        .get(bibleApi, {
+          headers: {
+            "api-key": "b0e2d0e0c5e2f7f4d7e2d0e0c5e2f7f4d7e2d0e0",
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     selectNameHandler(e) {
       this.memberName = e.target.value;
       database.ref("checkIn").on("value", (snapshot) => {
@@ -380,12 +401,12 @@ export default {
           this.sweetAlert("簽到失敗", "請重新簽到", "error");
         });
     },
-    // clearFireBaseDataAtLastDayOnDecember() {     
+    // clearFireBaseDataAtLastDayOnDecember() {
     //   const month = Dayjs().month();
     //   const date = Dayjs().date();
     //   if ( month === 12 && date === 31) {
     //     database.ref("checkIn").remove();
-    //   }     
+    //   }
     // },
   },
 };

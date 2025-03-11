@@ -261,14 +261,7 @@ export default {
     },
     isHoliday() {
       const day = Dayjs().day();
-      switch (day) {
-        case 0:
-          return "星期日";
-        case 6:
-          return "星期六";
-        default:
-          return false;
-      }
+      return day === 0 || day === 6;
     },
     year() {
       return Dayjs().format("YYYY");
@@ -328,6 +321,11 @@ export default {
         this.sweetAlert("簽到失敗", "請選擇姓名", "warning");
         return;
       }
+    }
+    
+  },
+};
+</script>
 
       /**
        * @description 簽到時間只能在早上七點到八點之間
@@ -357,10 +355,10 @@ export default {
 
       /**
        * @description 簽到次數不能超過12次
-       */
       const isCheckInNameHasCheckInOverTwelve = this.checkInTimes.some(
         (item) =>
-          item.name === this.memberName && this.checkInTimes.length >= 12
+          item.name === this.memberName && this.checkInTimes.length > 12
+      );
       );
 
       // 從陣列中找出每一位成員，並且日期不能重複，且簽到次數不能超過12次
@@ -380,7 +378,7 @@ export default {
       }
     },
     toLivePrayWebsite() {
-      window.location.href = "http://www.duranno.tw/livinglife/index.php/daily";
+      window.open("http://www.duranno.tw/livinglife/index.php/daily", "_blank");
     },
     sweetAlert(title, text, icon) {
       Swal.fire({
@@ -409,5 +407,4 @@ export default {
     //   }
     // },
   },
-};
-</script>
+

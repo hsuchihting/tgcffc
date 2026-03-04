@@ -6,6 +6,7 @@
 
 - Vue.js 3
 - Tailwind CSS 3.3
+- Node.js
 - firebase 8
 
 ## 操作說明
